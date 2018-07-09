@@ -17,6 +17,7 @@ set :fonts_dir, 'fonts'
 
 # Activate the syntax highlighter
 activate :syntax
+activate :livereload
 
 activate :autoprefixer do |config|
   config.browsers = ['last 2 version', 'Firefox ESR']
@@ -27,6 +28,7 @@ end
 # Github pages require relative links
 activate :relative_assets
 set :relative_links, true
+
 
 # Build Configuration
 configure :build do
