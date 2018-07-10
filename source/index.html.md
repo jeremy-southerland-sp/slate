@@ -16,24 +16,42 @@ search: true
 
 # Introduction
 
-Welcome to the SailPoint IdentityIQ API! The IdentityIQ API provides access to the IdentityIQ 
+Welcome to the SailPoint IdentityIQ API! The IdentityIQ API provides access to the IdentityIQ
 platform, allowing new opportunities for expanded innovation.  The IdentityIQ API is standards-
-based, built upon the SCIM 2.0 specification (http://www.simplecloud.info/).  You can use our 
-API to access IdentityIQ API endpoints, which allows you to programmatically interact with objects within IdentityIQ.
+based, built upon the RESTful [SCIM 2.0 specification](http://www.simplecloud.info/).  You can use our
+API to access IdentityIQ API endpoints, which allows you to programmatically interact with objects within IdentityIQ.  
+If you are looking for a SCIM connector, SailPoint offers both a SCIM 1.1 connector and a SCIM 2.0 connector.  Please see [Compass](community.sailpoint.com) for more details  on connectivity.
 
 ##Getting Started
-1. Read the IdentityIQ API Terms of Use (https://community.sailpoint.com/docs/DOC-6078)
-2. If you are unfamiliar with the SCIM 2.0 specification, or need a refresher, we suggest you 
-start here: SCIM Overview (http://www.simplecloud.info/#overview).
-3. Ensure you have IdentityIQ 7.0 Patch 2 installed.
+1. Read the [IdentityIQ API Terms of Use](https://community.sailpoint.com/docs/DOC-6078)
+2. If you are unfamiliar with the SCIM 2.0 specification, or need a refresher, we suggest you
+start here: [SCIM Overview](http://www.simplecloud.info/#overview).
+3. Ensure you have IdentityIQ 7.0 Patch 2 or later versions installed.
 4. Read our documentation.  All you have to do is keep scrolling!
 5. Participate on the forums.  Ask questions, read about requested and upcoming functionality, and provide assistance to others.
 6. Send us feedback! We want to hear from you.
 
+##Endpoint Availability
+
+
+Endpoint | IdentityIQ Version
+-------- | ------------------
+Core Schema | 7.0 Patch 2 and later
+/Users | 7.0 Patch 2 and later
+/Applications | 7.1 and later
+/Accounts | 7.1 and later
+/Entitlements | 7.1 and later
+/Roles | 7.1 and later
+/PolicyViolations | 7.2 and later
+/CheckedPolicyViolations | 7.2 and later
+/Workflows | 7.2 and later
+/LaunchedWorkflows | 7.2 and later
+/TaskResults | 7.2 and later
+
 ##SCIM Protocol
-SCIM stands for System for Cross-Domain Identity Management, and it is an HTTP-based protocol 
-that makes managing identities in multi-domain scenarios easier to support through a 
-standardized RESTful API service.  It provides a platform neutral schema and extension model for 
+SCIM stands for System for Cross-Domain Identity Management, and it is an HTTP-based protocol
+that makes managing identities in multi-domain scenarios easier to support through a
+standardized RESTful API service.  It provides a platform neutral schema and extension model for
 representing users, groups and other resource types in JSON format.
 
 The core schema consists of five resource types, as described below:
@@ -56,30 +74,37 @@ DELETE
 #Authentication
 
 ##Basic Authentication
-In IdentityIQ version 7.0, Patch 2, Basic Authentication is used to allow access to the API.  Basic authentication is a simple technique for enforcing access controls to API resources because it doesn't require cookie, session IDs, and instead uses the standard fields available in an HTTP header.  Please see the IETF protocol for more information on basic authentication.  https://www.ietf.org/rfc/rfc2617.txt and https://tools.ietf.org/html/rfc1945#section-11.
+Beginning in IdentityIQ version 7.0, Patch 2, Basic Authentication is used to allow access to the API. Basic authentication is a simple technique for enforcing access controls to API resoureces because it doesn't require session IDs, cookies, or login pages but instead uses standard fields in the HTTP header.  For more information on Basic authentication, please see
+[https://tools.ietf.org/html/rfc1945#section-11](https://tools.ietf.org/html/rfc1945#section-11)
+and
+[https://www.ietf.org/rfc/rfc2617.txt](https://www.ietf.org/rfc/rfc2617.txt).  Support for Basic Authentication will continue to exist in future releases.
 
 ##OAuth 2.0
 
 <aside class="notice">
-OAuth 2.0 Authentication will be supported in IdentityIQ Version 7.1.  Versions prior to 7.1 only support Basic Authentication.
+OAuth 2.0 Authentication is supported in IdentityIQ versions 7.1 and later.  Versions prior to 7.1 only support Basic Authentication.
 </aside>
 
 After configuring an OAuth2 API Credential you can access the token endpoint using your favorite client.  
->**Sample Request**
+> **Sample Request**
 
 ```cURL
-curl --user clientid:secret -d grant_type=client_credentials 
+curl --user clientid:secret -d grant_type=client_credentials
 "http://localhost:8080/identityiq/oauth2/token"
 ```
 
->**Sample Response**
+> **Sample Response**
+
 ```
-{"expires_in":1200,"token_type":"bearer","access_token":"bHRiYWVUVk5ERzFrSjdzUHNFNUllWFFjM1NOTHZVbW0uODFyVkZlVC8rcnB1bVpGNHBVZ2grWWMrdVA0bk9idjJwMUhuTE83QzR3MUJWb2pCc2VFbU5LTnZXaEt6MDNVeVIzZlBpams2WGg2cwpaSzJITnVNUEVvaTVtRXVTenJVWDNnSzFvSjNndnM5eWRKcTh3aVNyeW12MzdhN3BZRFpJOWtyY2NaSXM4a3lIY0xnQU1IYnFIZz09"
-}
+"expires_in":1200,"token_type":"bearer","access_token":"bHRiYWVUVk5ERzFrSjdzUHNFNUllWFFjM1NOTHZVbW0uODFyVkZlVC8rcnB1bVpGNHBVZ2grWWMrdVA0bk9idjJwMUhuTE83QzR3MUJWb2pCc2VFbU5LTnZXaEt6MDNVeVIzZlBpams2WGg2cwpaSzJITnVNUEVvaTVtRXVTenJVWDNnSzFvSjNndnM5eWRKcTh3aVNyeW12MzdhN3BZRFpJOWtyY2NaSXM4a3lIY0xnQU1IYnFIZz09"
 ```
 
 Using the access_token value you can then make requests to any SCIM endpoint using Authorization: Bearer in the header.
-```curl -H "Authorization: Bearer bHRiYWVUVk5ERzFrSjdzUHNFNUllWFFjM1NOTHZVbW0uODFyVkZlVC8rcnB1bVpGNHBVZ2grWWMrdVA0bk9idjJwMUhuTE83QzR3MUJWb2pCc2VFbU5LTnZXaEt6MDNVeVIzZlBpams2WGg2cwpaSzJITnVNUEVvaTVtRXVTenJVWDNnSzFvSjNndnM5eWRKcTh3aVNyeW12MzdhN3BZRFpJOWtyY2NaSXM4a3lIY0xnQU1IYnFIZz09" http://localhost:8080/iiq/scim/v2/Users?attributes=userName
+
+> **Sample SCIM endpoint request**
+
+```cURL
+curl -H "Authorization: Bearer bHRiYWVUVk5ERzFrSjdzUHNFNUllWFFjM1NOTHZVbW0uODFyVkZlVC8rcnB1bVpGNHBVZ2grWWMrdVA0bk9idjJwMUhuTE83QzR3MUJWb2pCc2VFbU5LTnZXaEt6MDNVeVIzZlBpams2WGg2cwpaSzJITnVNUEVvaTVtRXVTenJVWDNnSzFvSjNndnM5eWRKcTh3aVNyeW12MzdhN3BZRFpJOWtyY2NaSXM4a3lIY0xnQU1IYnFIZz09" http://localhost:8080/iiq/scim/v2/Users?attributes=userName
 ```
 
 
@@ -89,7 +114,7 @@ Using the access_token value you can then make requests to any SCIM endpoint usi
 > **Sample Request**
 
 ```cURL
-curl 
+curl
 "http://localhost:8080/iiq/scim/v2/ServiceProviderConfig"
 ```
 
@@ -138,7 +163,7 @@ curl
 }
 ```
 
-The SCIM protocol provides a schema that represents the service provider's configuration.  The service provider configuration gives the developer SCIM specifications and 
+The SCIM 2.0 protocol provides a schema that represents the service provider's configuration.  The service provider configuration gives the developer SCIM 2.0 specifications and
 additional implementation details in a standardized format.  It is recommended that first time users make a call to /ServiceProviderConfig before using other endpoints.  /ServiceProviderConfig is read-only and does not require any authentication.
 
 ### HTTP Request
@@ -163,7 +188,7 @@ authenticationSchemes (multi-valued) | A multi-valued complex type that specifie
 > **Sample Request**
 
 ```cURL
-curl -u "<username>:<password>" 
+curl -u "<username>:<password>"
 "http://localhost:8080/iiq/scim/v2/Schemas"
 ```
 
@@ -229,7 +254,7 @@ attributes | Complex type with many sub-attributes including name, type, subAttr
 > **Sample Request**
 
 ```cURL
-curl -u "<user>:<password>" 
+curl -u "<user>:<password>"
 "http://localhost:8080/identityiq/scim/v2/ResourceTypes"
 ```
 
@@ -270,7 +295,7 @@ curl -u "<user>:<password>"
 }
 ```
 
-The /ResourceType endpoint provides metadata and details for endpoints.  This includes information such as an resource ID, name, description, endpoint, base URI, schemas 
+The /ResourceType endpoint provides metadata and details for endpoints.  This includes information such as an resource ID, name, description, endpoint, base URI, schemas
 and schema extensions.  /ResourceTypes is read-only.
 
 ### HTTP Request
@@ -279,10 +304,10 @@ and schema extensions.  /ResourceTypes is read-only.
 
 ### Response Format
 
-Parameter | Description 
---------- | ----------- 
-id | Resource type's server unique id 
-name | Name of resource type 
+Parameter | Description
+--------- | -----------
+id | Resource type's server unique id
+name | Name of resource type
 description | Human-readable description of resource type
 endpoint | The HTTP-addressable endpoint
 schema | The primary/base schema URI. URI MUST match the id associated with the Schema resource.
@@ -317,7 +342,7 @@ manager | The user's manager, referencing the 'id' attribute of another User | E
 > **Sample Request**
 
 ```cURL
-curl -u "<user>:<password>" 
+curl -u "<user>:<password>"
 "http://localhost:8080/iiq/scim/v2/Users"
 ```
 
@@ -402,7 +427,7 @@ This endpoint retrieves all identities.  As a performance consideration, roles a
 > **Sample Request**
 
 ```cURL
-curl -u "<user>:<password>" 
+curl -u "<user>:<password>"
 "http://localhost:8080/iiq/scim/v2/Users/<id>"
 ```
 
@@ -417,8 +442,8 @@ This endpoint retrieves a specific identity, where ID in the request is the ID o
 > **Sample Request**
 
 ```cURL
-curl -u "<user>:<password>" 
-"http://localhost:8080/identityiq/scim/v2/Users/andy.dwyerattributes:userName,urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:manager,urn:ietf:params:scim:schemas:sailpoint:1.0:User:entitlements,urn:ietf:params:scim:schemas:sailpoint:1.0:User:roles"
+curl -u "<user>:<password>"
+"http://localhost:8080/identityiq/scim/v2/Users/andy.dwyer?attributes=userName,urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:manager,urn:ietf:params:scim:schemas:sailpoint:1.0:User:entitlements,urn:ietf:params:scim:schemas:sailpoint:1.0:User:roles"
 ```
 
 This endpoint retrieves a specific identity and its role and entitlement information.
@@ -426,17 +451,17 @@ This endpoint retrieves a specific identity and its role and entitlement informa
 
 ### HTTP Request
 
-`http://localhost:8080/identityiq/scim/v2/Users/andy.dwyerattributes:userName,urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:manager,urn:ietf:params:scim:schemas:sailpoint:1.0:User:entitlements,urn:ietf:params:scim:schemas:sailpoint:1.0:User:roles`
+`http://localhost:8080/identityiq/scim/v2/Users/andy.dwyer?attributes=userName,urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:manager,urn:ietf:params:scim:schemas:sailpoint:1.0:User:entitlements,urn:ietf:params:scim:schemas:sailpoint:1.0:User:roles`
 
 ## Filter Identities
 > **Sample Request**
 
 ```cURL
-curl -u "<user>:<password>" 
+curl -u "<user>:<password>"
 "http://localhost:8080/iiq/scim/v2/Users?filter=urn:ietf:params:scim:schemas:sailpoint:1.0:User:capabilities eq "SCIMExecutor"&sortBy=displayName"
 ```
 
-This endpoint retrieves identities that meet the filter criteria as specified in the request. 
+This endpoint retrieves identities that meet the filter criteria as specified in the request.
 
 
 ### HTTP Request
@@ -449,7 +474,7 @@ This endpoint retrieves identities that meet the filter criteria as specified in
 ```cURL
 curl -X POST -u "<user>:<password>" -H "Content-Type: application/scim+json"
  -d ' {
-"userName": "mouseRat", 
+"userName": "mouseRat",
 "name": {
 "familyName":"Dwyer",
 "givenName":"Andy",
@@ -469,10 +494,10 @@ This request creates a single, new identity using the parameters passed in the r
 
 ##Edit an Identity
 
-> **Sample Request** 
+> **Sample Request**
 
 ```cURL
-curl -X PUT -u "<user>:<password>" 
+curl -X PUT -u "<user>:<password>"
 -d '    {
 "urn:ietf:params:scim:schemas:sailpoint:1.0:User": {
 },
@@ -557,8 +582,8 @@ This request makes one or more changes on an existing Identity.  This can be use
 > **Sample Request**
 
 ```cURL
-curl -X DELETE -u "<user>:<password>" 
--H "Content-Type: application/scim+json" 
+curl -X DELETE -u "<user>:<password>"
+-H "Content-Type: application/scim+json"
 "http://localhost:8080/iiq/scim/v2/Users/2c909180534353fe0153574354ea0104"
 ```
 
@@ -570,15 +595,15 @@ This endpoint deletes a single identity.  To delete an identity, the authenticat
 
 # Applications (/applications)
 
-The Applications endpoint allows implementors to get information for a single application.  When making a request to the application endpoint, the application ID must be included. 
+The Applications endpoint allows implementors to get information for a single application.  When making a request to the application endpoint, the application ID must be included.
 
 ### Response Format
 
 Parameter | Description
---------- | ----------- 
+--------- | -----------
 id | Unique application identifier
 schema | Schema definition
-applicationSchemas | Type, value, and $ref 
+applicationSchemas | Type, value, and $ref
 name | Name of the application
 features | Supported features of the application
 owner | Identity ID of the application owner
@@ -642,7 +667,7 @@ curl -u "<user>:<password>"
 
 The Accounts resource allows for retrieving, updating, and deleting of accounts on target systems.
 
-Parameter | Description 
+Parameter | Description
 --------- | -----------
 id | The unique identifier for the Account object associated with IdentityIQ
 nativeIdentity | The Account unique identifier associated with the native application
@@ -944,15 +969,133 @@ curl -X POST -u "<user>:<password>" -H "Content-Type: application/scim+json"
 "http://localhost:8080/idiq/scim/v2/Accounts"
 ```
 ### HTTP Request
-`POST http://localhost:8080/iiq/scim/v2/Accounts/<ID>`
+`POST http://localhost:8080/iiq/scim/v2/Accounts/<accountID>`
 
 ## Enable/ Disable Account
 
-This request is used to enable or disable an account.  In this example, Adam Kennedy's account status is changed from active to inactive, effectively disabling his account.
+This request is used to enable or disable an account.  In this example, Mary Johnson's account status is changed from active to inactive, effectively disabling her account.  To do this, the Active attribute is changed from true to false with a PUT request.
+
+> ** Sample Request**
+
+```
+curl -X PUT -u "<user>:<password>" -H "Content-Type: application/scim_json"
+{
+"lastRefresh": "2015-04-22T16:30:17.760-05:00",
+"displayName": "Mary.Johnson",
+"active": false,
+"manuallyCorrelated": false,
+"nativeIdentity": "1a2a",
+"application": {
+"displayName": "HR_Employees",
+"value": "2c9084ce4ce3093a014ce30966270026",
+"$ref": "http://moonraker.test.sailpoint.com:8082/identityiq/scim/v2/Applications/2c9084ce4ce3093a014ce30966270026"
+},
+"identity": {
+"displayName": "Mary Johnson",
+"value": "2c9084ce4ce3093a014ce3096878002a",
+"$ref": "http://moonraker.test.sailpoint.com:8082/identityiq/scim/v2/Users/2c9084ce4ce3093a014ce3096878002a"
+},
+"meta": {
+"created": "2015-04-22T16:30:17.760-05:00",
+"location": "http://moonraker.test.sailpoint.com:8082/identityiq/scim/v2/Accounts/2c9084ce4ce309ba014ce309e1200005",
+"lastModified": "2015-04-22T16:30:17.776-05:00",
+"version": "W/\"1429738217776\"",
+"resourceType": "Account"
+},
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Account",
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Application:Schema:2c9084ce4ce3093a014ce30966270027"
+],
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Application:Schema:2c9084ce4ce3093a014ce30966270027": {
+"inactiveIdentity": "FALSE",
+"firstName": "Mary",
+"lastName": "Johnson",
+"jobtitle": "Global Infrastructure Manager",
+"fullName": "Mary.Johnson",
+"employeeId": "1a2a",
+"location": "Austin",
+"managerId": "1a",
+"department": "Regional Operations",
+"region": "Americas",
+"costcenter": [
+"R03",
+"L07"
+],
+"email": "Mary.Johnson@demoexample.com"
+},
+"hasEntitlements": false,
+"id": "2c9084ce4ce309ba014ce309e1200005",
+"locked": false
+}
+```
+
+
+###HTTP Request
+`PUT https://localhost:8080/iiq/scim/v2/Accounts/<ID>`
 
 ## Change Account Password
 
-Coming soon!
+This request is used to change or reset a password for an account.  In this example, Mary Johnson's account password is changed to "passwordSwordfish".  Please note, the password attribute is not returned in the GET response, so the attribute must be added to the body.
+
+> ** Sample Request**
+
+```
+curl -X PUT -u "<user>:<password>" -H "Content-Type: application/scim_json"
+{
+"password": "passwordSwordfish",
+"lastRefresh": "2015-04-22T16:30:17.760-05:00",
+"displayName": "Mary.Johnson",
+"active": false,
+"manuallyCorrelated": false,
+"nativeIdentity": "1a2a",
+"application": {
+"displayName": "HR_Employees",
+"value": "2c9084ce4ce3093a014ce30966270026",
+"$ref": "http://moonraker.test.sailpoint.com:8082/identityiq/scim/v2/Applications/2c9084ce4ce3093a014ce30966270026"
+},
+"identity": {
+"displayName": "Mary Johnson",
+"value": "2c9084ce4ce3093a014ce3096878002a",
+"$ref": "http://moonraker.test.sailpoint.com:8082/identityiq/scim/v2/Users/2c9084ce4ce3093a014ce3096878002a"
+},
+"meta": {
+"created": "2015-04-22T16:30:17.760-05:00",
+"location": "http://moonraker.test.sailpoint.com:8082/identityiq/scim/v2/Accounts/2c9084ce4ce309ba014ce309e1200005",
+"lastModified": "2015-04-22T16:30:17.776-05:00",
+"version": "W/\"1429738217776\"",
+"resourceType": "Account"
+},
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Account",
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Application:Schema:2c9084ce4ce3093a014ce30966270027"
+],
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Application:Schema:2c9084ce4ce3093a014ce30966270027": {
+"inactiveIdentity": "FALSE",
+"firstName": "Mary",
+"lastName": "Johnson",
+"jobtitle": "Global Infrastructure Manager",
+"fullName": "Mary.Johnson",
+"employeeId": "1a2a",
+"location": "Austin",
+"managerId": "1a",
+"department": "Regional Operations",
+"region": "Americas",
+"costcenter": [
+"R03",
+"L07"
+],
+"email": "Mary.Johnson@demoexample.com"
+},
+"hasEntitlements": false,
+"id": "2c9084ce4ce309ba014ce309e1200005",
+"locked": false
+}
+```
+
+
+###HTTP Request
+`PUT https://localhost:8080/iiq/scim/v2/Accounts/<ID>`
+
 
 ## Delete Account
 
@@ -961,7 +1104,7 @@ This request is used to delete a valid account on a target application for a giv
 > ** Sample Request**
 
 ```
-curl -X DELETE - u "<user>:<password>" -H "Content-Type: application/scim_json
+curl -X DELETE - u "<user>:<password>" -H "Content-Type: application/scim_json"
 "http://localhost:8080/iiq/scim/v2/Accounts/2c9084ee56c0905f0156c090b4d800b8"
 ```
 ### HTTP Request
@@ -970,9 +1113,996 @@ curl -X DELETE - u "<user>:<password>" -H "Content-Type: application/scim_json
 
 
 
+# Entitlements (/Entitlements)
+
+The Entitlement resource allows for getting entitlements within IdentityIQ.
+
+Parameter | Description
+--------- | -----------
+id | The unique identifier for the entitlement object associated with IdentityIQ
+application | The application where the entitlement resides
+attribute | The type of entitlement attribute
+type | The type of entitlement
+entitleAuth |
+owner | Entitlement Owner
+requestable | Flag to determine if an entitlement is requestable
+aggregated | Flag to determine if entitlement is aggregated
+value | Group name for the entitlement resource with the attribute of "memberOf"
+lastRefresh | Date of last refresh
+lastTargetAggregation | Date of last target aggregation
+active | Status of the entitlement
 
 
 
+## Get All Entitlements
+
+The request retrieves all entitlements within IdentityIQ.
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/Entitlements"
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Entitlement"
+],
+"application": {
+"value": "2c9084ee586e9dcc01586e9ed9c6032a",
+"$ref": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Applications/2c9084ee586e9dcc01586e9ed9c6032a",
+"displayName": "Active_Directory"
+},
+"attribute": "accessLog",
+"type": "Permission",
+"entitleAuth": "None",
+"meta": {
+"lastModified": "2016-11-21T10:34:42.301-06:00",
+"created": "2016-11-16T13:31:04.018-06:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Entitlements/2c9084ee586e9dcc01586e9f00d20487",
+"resourceType": "Entitlement",
+"version": "W/\"1479746082301\""
+},
+"descriptions": [
+{
+"locale": "en_GB",
+"value": "<strong>**дccﾼssLㅇg**</strong> tдrgﾼt frｪﾼndlΫ dﾼscrｪptｪㅇn"
+},
+{
+"locale": "en_US",
+"value": "<strong>**accessLog**</strong> <em>target friendly description</em>"
+}
+],
+"id": "2c9084ee586e9dcc01586e9f00d20487",
+"requestable": true,
+"owner": {
+"value": "2c9084ee586e9dcc01586e9ed8b80329",
+"$ref": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Users/2c9084ee586e9dcc01586e9ed8b80329",
+"displayName": "Mary Johnson"
+},
+"aggregated": false,
+"reviewer": {},
+"displayableName": "accessLog"
+}
+
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/Entitlements`
 
 
+## Get Single Entitlement
 
+The request retrieves a single entitlement specified by the entitlementID.
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/Entitlements/<EntitlementID>"
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Entitlement"
+],
+"application": {
+"value": "2c9084ee586e9dcc01586e9ed9c6032a",
+"$ref": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Applications/2c9084ee586e9dcc01586e9ed9c6032a",
+"displayName": "Active_Directory"
+},
+"attribute": "accessLog",
+"type": "Permission",
+"entitleAuth": "None",
+"meta": {
+"lastModified": "2016-11-21T10:34:42.301-06:00",
+"created": "2016-11-16T13:31:04.018-06:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Entitlements/2c9084ee586e9dcc01586e9f00d20487",
+"resourceType": "Entitlement",
+"version": "W/\"1479746082301\""
+},
+"descriptions": [
+{
+"locale": "en_GB",
+"value": "<strong>**дccﾼssLㅇg**</strong> tдrgﾼt frｪﾼndlΫ dﾼscrｪptｪㅇn"
+},
+{
+"locale": "en_US",
+"value": "<strong>**accessLog**</strong> <em>target friendly description</em>"
+}
+],
+"id": "2c9084ee586e9dcc01586e9f00d20487",
+"requestable": true,
+"owner": {
+"value": "2c9084ee586e9dcc01586e9ed8b80329",
+"$ref": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Users/2c9084ee586e9dcc01586e9ed8b80329",
+"displayName": "Mary Johnson"
+},
+"aggregated": false,
+"reviewer": {},
+"displayableName": "accessLog"
+}
+
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/Entitlements/<EntitlementID>`
+
+
+# Roles (/Roles)
+
+The Roles resource allows for getting roles within IdentityIQ.
+
+Parameter | Description
+--------- | -----------
+id | The unique identifier for the role object associated with IdentityIQ
+name | The name of the role
+displayableName | The displayable name of the role
+owner | Role owner information with additional sub-attributes
+type | The type of role with additional sub-attributes
+descriptions | Role descriptions
+active | Active status of role
+activationDate | Date the role became active
+deactivationDate | Date the role become inactive
+
+
+## Get All Roles
+
+The request retrieves all roles within IdentityIQ.
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/Roles”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:api:messages:2.0:ListResponse"
+],
+"startIndex": 1,
+"totalResults": 240,
+"Resources": [
+{
+"id": "2c9084ee586e9dcc01586e9eeafe034d",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Role"
+],
+"identAttr": {},
+"name": "User - IT",
+"owner": {
+"value": "2c9084ee586e9dcc01586e9eeaf3034c",
+"$ref": "http://localhost:8080/iiq/scim/v2/Users/2c9084ee586e9dcc01586e9eeaf3034c",
+"displayName": "Dennis Barnes"
+},
+"active": true,
+"displayableName": "User - IT",
+"permits": [],
+"type": {
+"assignmentSelector": false,
+"iiq": false,
+"name": "it",
+"autoAssignment": false,
+"permits": false,
+"displayName": "IT",
+"manualAssignment": false,
+"requirements": false
+},
+"requirements": [],
+"inheritance": [],
+"descriptions": [
+{
+"locale": "en_US",
+"value": "Has a user account on the company database."
+}
+],
+"meta": {
+"lastModified": "2016-11-16T13:36:15.730-06:00",
+"created": "2016-11-16T13:30:58.430-06:00",
+"location": "http://localhost:8080/iiq/scim/v2/Roles/2c9084ee586e9dcc01586e9eeafe034d",
+"resourceType": "Role",
+"version": "W/\"1479324975730\""
+}
+}
+}
+
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/Roles`
+
+
+## Get Single Role
+
+The request retrieves a single role specified by the roleID.
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/Roles/<RoleID>"
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:api:messages:2.0:ListResponse"
+],
+"startIndex": 1,
+"totalResults": 240,
+"Resources": [
+{
+"id": "2c9084ee586e9dcc01586e9eeafe034d",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Role"
+],
+"identAttr": {},
+"name": "User - IT",
+"owner": {
+"value": "2c9084ee586e9dcc01586e9eeaf3034c",
+"$ref": "http://localhost:8080/iiq/scim/v2/Users/2c9084ee586e9dcc01586e9eeaf3034c",
+"displayName": "Dennis Barnes"
+},
+"active": true,
+"displayableName": "User - IT",
+"permits": [],
+"type": {
+"assignmentSelector": false,
+"iiq": false,
+"name": "it",
+"autoAssignment": false,
+"permits": false,
+"displayName": "IT",
+"manualAssignment": false,
+"requirements": false
+},
+"requirements": [],
+"inheritance": [],
+"descriptions": [
+{
+"locale": "en_US",
+"value": "Has a user account on the company database."
+}
+],
+"meta": {
+"lastModified": "2016-11-16T13:36:15.730-06:00",
+"created": "2016-11-16T13:30:58.430-06:00",
+"location": "http://localhost:8080/iiq/scim/v2/Roles/2c9084ee586e9dcc01586e9eeafe034d",
+"resourceType": "Role",
+"version": "W/\"1479324975730\""
+}
+}
+}
+
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/Roles/RoleID>`
+
+
+# Policy Violations (/PolicyViolations)
+
+The policy violation resource within IdentityIQ allows you to programmatically retrieve existing policy violations.  You can choose to filter your results by one or more attributes.
+
+Parameter | Description
+--------- | -----------
+id | The unique identifier for the policy violation object associated with IdentityIQ
+identity | The identity effected by the violation
+policyName | The name of the policy in violation
+constraintName | The name of the policy contrainst
+status | The status of the policy violation
+description | Description of the violation
+owner | Owner of the policy violation
+
+
+## Get All Policy Violations
+
+The request retrieves all policy violations within IdentityIQ.
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/PolicyViolations”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:api:messages:2.0:ListResponse"
+],
+"startIndex": 1,
+"totalResults": 1,
+"Resources": [
+{
+"id": "2c9084ee5cf2ff4b015cf301b2861498",
+"identity": {
+"value": "2c9084ee5cf2fc59015cf2fce63a0334",
+"$ref": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Users/2c9084ee5cf2fc59015cf2fce63a0334",
+"displayName": "Mary Johnson"
+},
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:PolicyViolation"
+],
+"policyName": "Advanced Entitlement Policy with Details",
+"constraintName": "System Administration Violation",
+"status": "Open",
+"description": "Active_Directory': groupmbr'='UnixAdministration'' --- conflicts with --- Active_Directory': groupmbr'='WindowsAdministration'' ",
+"owner": {
+"value": "2c9084ee5cf2fc59015cf2fd49fd0613",
+"$ref": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Users/2c9084ee5cf2fc59015cf2fd49fd0613",
+"displayName": "James Smith"
+},
+"meta": {
+"lastModified": "2017-06-29T03:41:53.433-05:00",
+"created": "2017-06-29T03:39:53.734-05:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/PolicyViolations/2c9084ee5cf2ff4b015cf301b2861498",
+"version": "W/\"1498725713433\"",
+"resourceType": "PolicyViolation"
+}
+}
+}
+
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/PolicyViolations`
+
+
+# Check for Potential Policy Violations (/CheckedPolicyViolations)
+
+The checked policy violation resource within IdentityIQ allows you to check for a potential policy violation before an action is performed.  
+
+Parameter | Description
+--------- | -----------
+policies | Multivalue string of poliucy names to check,  if empty do all active policies
+id | The id of the identity.  Either id or userName is required
+userName | the identity name to check for violations
+plan | the provisioning plan applied to the object
+plan value | the value of the plan
+plan type | Either application/xml or application/sailpoint.object.ProvisioningPlan+json
+
+
+## Check Account Request for Potential Policy Violation
+
+The request checks an account request for a potential policy violation.  This request can be a role or entitlement with a provisioning plan type of XML or JSON.
+
+> **Sample Request**
+
+```cURL
+curl -X POST -u "<user>:<password>"
+{
+"identity": "Ryan.Russell",
+"plan": {
+"value": "{accounts=[{op=Modify, instance=null, application=Active_Directory, attributes=[{op=Add, name=groupmbr, value=UnixAdministration}], nativeIdentity=null}]}",
+"type": "application/sailpoint.object.ProvisioningPlan+json"
+},
+"policies": ["SOD Policy", "Entitlement Policy", "RandomPolicyNotExisting"]
+}
+"http://localhost:8080/iiq/scim/v2/CheckedPolicyViolations”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"violations": [
+{
+"policyName": "SOD Policy",
+"constraintName": "IT SOD-117",
+"description": "Security design should not be combined with administrative permissions.",
+"leftBundles": [
+"Security Architect - IT"
+],
+"policyType": "SOD",
+"entitlements": [],
+"rightBundles": [
+"Unix Administrator - IT"
+]
+}
+],
+"identity": "Ryan.Russell",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:CheckedPolicyViolation"
+],
+"plan": {
+"value": "{accounts=[{op=Modify, instance=null, application=Active_Directory, attributes=[{op=Add, name=groupmbr, value=UnixAdministration}], nativeIdentity=null}]}",
+"type": "application/sailpoint.object.ProvisioningPlan+json"
+},
+"policies": [
+"SOD Policy",
+"Entitlement Policy",
+"RandomPolicyNotExisting"
+],
+"meta": {
+"resourceType": "CheckedPolicyViolation"
+}
+}
+```
+
+### HTTP Request
+
+`POST http://localhost:8080/iiq/scim/v2/CheckedPolicyViolations`
+
+
+# Workflows (/Workflows)
+
+The workflows resource within IdentityIQ allows you to perform various workflow related activities, from listing available workflows, launching a workflow, and retrieving the status of a workflow.  
+
+Parameter | Description
+--------- | -----------
+id | ID of the workflow object
+name | Name of the workflow
+description | Description of the workflow
+type | Type of workflow
+handler | Workflow handler
+
+
+## Get all workflows
+
+This request retrieves all workflows within IdentityIQ
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/Workflows”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:api:messages:2.0:ListResponse"
+],
+"startIndex": 1,
+"totalResults": 41,
+"Resources": [
+{
+"id": "2c9084ee5cf81e11015cf81e5156017b",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:Workflow"
+],
+"name": "Do Provisioning Forms",
+"type": "Subprocess",
+"meta": {
+"created": "2017-06-30T03:29:15.478-05:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/Workflows/2c9084ee5cf81e11015cf81e5156017b",
+"version": "W/\"1498811355478\"",
+"resourceType": "Workflow"
+}
+}]}
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/Workflows`
+
+## Launch a Workflow
+
+This request launches a workflow.
+
+> **Sample Request**
+
+```cURL
+curl -x POST -u "<user>:<password>"
+{
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow",
+"urn:ietf:params:scim:schemas:sailpoint:1.0:TaskResult"
+],
+"urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow": {
+"workflowName": "LCM Manage Passwords",
+"input": [
+{
+"key": "plan",
+"value": "<ProvisioningPlan nativeIdentity=\"Ernest.Wagner\" targetIntegration=\"ADDirectDemodata\">\n  <AccountRequest application=\"ADDirectDemodata\" nativeIdentity=\"CN=Ernest Wagner,OU=Singapore,OU=Asia-Pacific,OU=DemoData,DC=test,DC=sailpoint,DC=com\" op=\"Modify\" targetIntegration=\"ADDirectDemodata\">\n    <Attributes>\n      <Map>\n        <entry key=\"flow\" value=\"PasswordsRequest\"\/>\n        <entry key=\"interface\" value=\"LCM\"\/>\n        <entry key=\"operation\" value=\"PasswordChange\"\/>\n        <entry key=\"provisioningPolicies\">\n          <value>\n            <List>\n              <String>ChangePassword<\/String>\n            <\/List>\n          <\/value>\n        <\/entry>\n      <\/Map>\n    <\/Attributes>\n    <AttributeRequest name=\"password\" op=\"Set\" value=\"xyzzy\">\n      <Attributes>\n        <Map>\n          <entry key=\"preExpire\">\n            <value>\n              <Boolean>true<\/Boolean>\n            <\/value>\n          <\/entry>\n        <\/Map>\n      <\/Attributes>\n    <\/AttributeRequest>\n    <ProvisioningResult status=\"committed\"\/>\n  <\/AccountRequest>\n  <Attributes>\n    <Map>\n<entry key=\"requester\" value=\"Aaron.Nichols\"\/>\n      <entry key=\"source\" value=\"LCM\"\/>\n    <\/Map>\n  <\/Attributes>\n<\/ProvisioningPlan>\n",
+"type": "application\/xml"
+},
+{
+"key": "targetName",
+"value": "Ernest.Wagner"
+},
+{
+"key": "targetClass",
+"value": "Identity"
+},
+{
+"key": "identityName",
+"value": "Ernest.Wagner"
+},
+{
+"key": "flow",
+"value": "PasswordRequest"
+}
+]
+}
+}
+"http://localhost:8080/iiq/scim/v2/LaunchedWorkflows”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow": {
+"input": [
+{}
+],
+"workflowName": "LCM Manage Passwords",
+"identityRequestId": "0000000001",
+"retries": 0,
+"output": [
+{
+"value": "<ProvisioningProject identity=\"Ernest.Wagner\">\n  <Attributes>\n    <Map>\n      <entry key=\"disableRetryRequest\">\n        <value>\n          <Boolean>true</Boolean>\n        </value>\n      </entry>\n      <entry key=\"identityRequestId\" value=\"0000000001\"/>\n      <entry key=\"optimisticProvisioning\" value=\"false\"/>\n      <entry key=\"requester\" value=\"James.Smith\"/>\n      <entry key=\"source\" value=\"LCM\"/>\n    </Map>\n  </Attributes>\n  <MasterPlan>\n    <ProvisioningPlan nativeIdentity=\"Ernest.Wagner\" targetIntegration=\"ADDirectDemodata\">\n      <Attributes>\n        <Map>\n          <entry key=\"identityRequestId\" value=\"0000000001\"/>\n          <entry key=\"requester\" value=\"James.Smith\"/>\n          <entry key=\"source\" value=\"LCM\"/>\n        </Map>\n      </Attributes>\n      <Requesters>\n        <Reference class=\"sailpoint.object.Identity\" id=\"2c9084ee5cf81e11015cf81efe370613\" name=\"James.Smith\"/>\n      </Requesters>\n    </ProvisioningPlan>\n  </MasterPlan>\n</ProvisioningProject>\n",
+"type": "application/xml",
+"key": "project"
+},
+{
+"value": "0000000001",
+"key": "identityRequestId"
+},
+{
+"value": "0",
+"type": "application/int",
+"key": "retries"
+},
+{
+"value": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"key": "workflowCaseId"
+},
+{
+"value": "<WorkflowSummary step=\"end\"/>\n",
+"type": "application/xml",
+"key": "workflowSummary"
+}
+],
+"workflowCaseId": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"workflowSummary": "<WorkflowSummary step=\"end\"/>\n"
+},
+"launched": "2017-06-30T12:11:42.421-05:00",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow",
+"urn:ietf:params:scim:schemas:sailpoint:1.0:TaskResult"
+],
+"taskDefinition": "Workflow Launcher",
+"targetClass": "Identity",
+"targetName": "Ernest.Wagner",
+"type": "LCM",
+"pendingSignoffs": 0,
+"meta": {
+"lastModified": "2017-06-30T12:11:43.910-05:00",
+"created": "2017-06-30T12:11:42.782-05:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/TaskResults/2c9084ee5cf825e8015cf9fca3be0ffc",
+"version": "W/\"1498842703910\"",
+"resourceType": "LaunchedWorkflow"
+},
+"messages": [],
+"id": "2c9084ee5cf825e8015cf9fca3be0ffc",
+"completionStatus": "Success",
+"launcher": "James.Smith",
+"partitioned": false,
+"verified": "2017-06-30T12:11:43.675-05:00",
+"terminated": false,
+"name": "LCM Manage Passwords",
+"attributes": [
+{
+"value": "<ProvisioningProject identity=\"Ernest.Wagner\">\n  <Attributes>\n    <Map>\n      <entry key=\"disableRetryRequest\">\n        <value>\n          <Boolean>true</Boolean>\n        </value>\n      </entry>\n      <entry key=\"identityRequestId\" value=\"0000000001\"/>\n      <entry key=\"optimisticProvisioning\" value=\"false\"/>\n      <entry key=\"requester\" value=\"James.Smith\"/>\n      <entry key=\"source\" value=\"LCM\"/>\n    </Map>\n  </Attributes>\n  <MasterPlan>\n    <ProvisioningPlan nativeIdentity=\"Ernest.Wagner\" targetIntegration=\"ADDirectDemodata\">\n      <Attributes>\n        <Map>\n          <entry key=\"identityRequestId\" value=\"0000000001\"/>\n          <entry key=\"requester\" value=\"James.Smith\"/>\n          <entry key=\"source\" value=\"LCM\"/>\n        </Map>\n      </Attributes>\n      <Requesters>\n        <Reference class=\"sailpoint.object.Identity\" id=\"2c9084ee5cf81e11015cf81efe370613\" name=\"James.Smith\"/>\n      </Requesters>\n    </ProvisioningPlan>\n  </MasterPlan>\n</ProvisioningProject>\n",
+"key": "project"
+},
+{
+"value": "0000000001",
+"key": "identityRequestId"
+},
+{
+"value": "0",
+"key": "retries"
+},
+{
+"value": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"key": "workflowCaseId"
+},
+{
+"value": "<WorkflowSummary step=\"end\"/>\n",
+"key": "workflowSummary"
+}
+],
+"completed": "2017-06-30T12:11:43.909-05:00"
+}
+```
+
+### HTTP Request
+
+`POST http://localhost:8080/iiq/scim/v2/LaunchedWorkflows`
+
+
+## Get all Launched Workflows
+
+This request retrieves all launched workflows within IdentityIQ
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/LaunchedWorkflows”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:api:messages:2.0:ListResponse"
+],
+"startIndex": 1,
+"totalResults": 1,
+"Resources": [
+{
+"urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow": {
+"input": [
+{}
+],
+"workflowName": "LCM Manage Passwords",
+"identityRequestId": "0000000001",
+"retries": 0,
+"output": [
+{
+"value": "<ProvisioningProject identity=\"Ernest.Wagner\">\n  <Attributes>\n    <Map>\n      <entry key=\"disableRetryRequest\">\n        <value>\n          <Boolean>true</Boolean>\n        </value>\n      </entry>\n      <entry key=\"identityRequestId\" value=\"0000000001\"/>\n      <entry key=\"optimisticProvisioning\" value=\"false\"/>\n      <entry key=\"requester\" value=\"James.Smith\"/>\n      <entry key=\"source\" value=\"LCM\"/>\n    </Map>\n  </Attributes>\n  <MasterPlan>\n    <ProvisioningPlan nativeIdentity=\"Ernest.Wagner\" targetIntegration=\"ADDirectDemodata\">\n      <Attributes>\n        <Map>\n          <entry key=\"identityRequestId\" value=\"0000000001\"/>\n          <entry key=\"requester\" value=\"James.Smith\"/>\n          <entry key=\"source\" value=\"LCM\"/>\n        </Map>\n      </Attributes>\n      <Requesters>\n        <Reference class=\"sailpoint.object.Identity\" id=\"2c9084ee5cf81e11015cf81efe370613\" name=\"James.Smith\"/>\n      </Requesters>\n    </ProvisioningPlan>\n  </MasterPlan>\n</ProvisioningProject>\n",
+"type": "application/xml",
+"key": "project"
+},
+{
+"value": "0000000001",
+"key": "identityRequestId"
+},
+{
+"value": "0",
+"type": "application/int",
+"key": "retries"
+},
+{
+"value": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"key": "workflowCaseId"
+},
+{
+"value": "<WorkflowSummary step=\"end\"/>\n",
+"type": "application/xml",
+"key": "workflowSummary"
+}
+],
+"workflowCaseId": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"workflowSummary": "<WorkflowSummary step=\"end\"/>\n"
+},
+"launched": "2017-06-30T12:11:42.421-05:00",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow",
+"urn:ietf:params:scim:schemas:sailpoint:1.0:TaskResult"
+],
+"taskDefinition": "Workflow Launcher",
+"targetClass": "Identity",
+"targetName": "Ernest.Wagner",
+"type": "LCM",
+"pendingSignoffs": 0,
+"meta": {
+"lastModified": "2017-06-30T12:11:43.910-05:00",
+"created": "2017-06-30T12:11:42.782-05:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/TaskResults/2c9084ee5cf825e8015cf9fca3be0ffc",
+"version": "W/\"1498842703910\"",
+"resourceType": "LaunchedWorkflow"
+},
+"messages": [],
+"id": "2c9084ee5cf825e8015cf9fca3be0ffc",
+"completionStatus": "Success",
+"launcher": "James.Smith",
+"partitioned": false,
+"verified": "2017-06-30T12:11:43.675-05:00",
+"terminated": false,
+"name": "LCM Manage Passwords",
+"attributes": [
+{
+"value": "<ProvisioningProject identity=\"Ernest.Wagner\">\n  <Attributes>\n    <Map>\n      <entry key=\"disableRetryRequest\">\n        <value>\n          <Boolean>true</Boolean>\n        </value>\n      </entry>\n      <entry key=\"identityRequestId\" value=\"0000000001\"/>\n      <entry key=\"optimisticProvisioning\" value=\"false\"/>\n      <entry key=\"requester\" value=\"James.Smith\"/>\n      <entry key=\"source\" value=\"LCM\"/>\n    </Map>\n  </Attributes>\n  <MasterPlan>\n    <ProvisioningPlan nativeIdentity=\"Ernest.Wagner\" targetIntegration=\"ADDirectDemodata\">\n      <Attributes>\n        <Map>\n          <entry key=\"identityRequestId\" value=\"0000000001\"/>\n          <entry key=\"requester\" value=\"James.Smith\"/>\n          <entry key=\"source\" value=\"LCM\"/>\n        </Map>\n      </Attributes>\n      <Requesters>\n        <Reference class=\"sailpoint.object.Identity\" id=\"2c9084ee5cf81e11015cf81efe370613\" name=\"James.Smith\"/>\n      </Requesters>\n    </ProvisioningPlan>\n  </MasterPlan>\n</ProvisioningProject>\n",
+"key": "project"
+},
+{
+"value": "0000000001",
+"key": "identityRequestId"
+},
+{
+"value": "0",
+"key": "retries"
+},
+{
+"value": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"key": "workflowCaseId"
+},
+{
+"value": "<WorkflowSummary step=\"end\"/>\n",
+"key": "workflowSummary"
+}
+],
+"completed": "2017-06-30T12:11:43.909-05:00"
+}
+]
+}
+```
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/LaunchedWorkflows`
+
+## Get a Workflow Status
+
+This request retrieves the status of a launched workflow by WorkflowCaseID
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/LaunchedWorkflows/[ID]”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow": {
+"input": [
+{}
+],
+"workflowName": "LCM Manage Passwords",
+"identityRequestId": "0000000001",
+"retries": 0,
+"output": [
+{
+"value": "<ProvisioningProject identity=\"Ernest.Wagner\">\n  <Attributes>\n    <Map>\n      <entry key=\"disableRetryRequest\">\n        <value>\n          <Boolean>true</Boolean>\n        </value>\n      </entry>\n      <entry key=\"identityRequestId\" value=\"0000000001\"/>\n      <entry key=\"optimisticProvisioning\" value=\"false\"/>\n      <entry key=\"requester\" value=\"James.Smith\"/>\n      <entry key=\"source\" value=\"LCM\"/>\n    </Map>\n  </Attributes>\n  <MasterPlan>\n    <ProvisioningPlan nativeIdentity=\"Ernest.Wagner\" targetIntegration=\"ADDirectDemodata\">\n      <Attributes>\n        <Map>\n          <entry key=\"identityRequestId\" value=\"0000000001\"/>\n          <entry key=\"requester\" value=\"James.Smith\"/>\n          <entry key=\"source\" value=\"LCM\"/>\n        </Map>\n      </Attributes>\n      <Requesters>\n        <Reference class=\"sailpoint.object.Identity\" id=\"2c9084ee5cf81e11015cf81efe370613\" name=\"James.Smith\"/>\n      </Requesters>\n    </ProvisioningPlan>\n  </MasterPlan>\n</ProvisioningProject>\n",
+"type": "application/xml",
+"key": "project"
+},
+{
+"value": "0000000001",
+"key": "identityRequestId"
+},
+{
+"value": "0",
+"type": "application/int",
+"key": "retries"
+},
+{
+"value": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"key": "workflowCaseId"
+},
+{
+"value": "<WorkflowSummary step=\"end\"/>\n",
+"type": "application/xml",
+"key": "workflowSummary"
+}
+],
+"workflowCaseId": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"workflowSummary": "<WorkflowSummary step=\"end\"/>\n"
+},
+"launched": "2017-06-30T12:11:42.421-05:00",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:LaunchedWorkflow",
+"urn:ietf:params:scim:schemas:sailpoint:1.0:TaskResult"
+],
+"taskDefinition": "Workflow Launcher",
+"targetClass": "Identity",
+"targetName": "Ernest.Wagner",
+"type": "LCM",
+"pendingSignoffs": 0,
+"meta": {
+"lastModified": "2017-06-30T12:11:43.910-05:00",
+"created": "2017-06-30T12:11:42.782-05:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/TaskResults/2c9084ee5cf825e8015cf9fca3be0ffc",
+"version": "W/\"1498842703910\"",
+"resourceType": "LaunchedWorkflow"
+},
+"messages": [],
+"id": "2c9084ee5cf825e8015cf9fca3be0ffc",
+"completionStatus": "Success",
+"launcher": "James.Smith",
+"partitioned": false,
+"verified": "2017-06-30T12:11:43.675-05:00",
+"terminated": false,
+"name": "LCM Manage Passwords",
+"attributes": [
+{
+"value": "<ProvisioningProject identity=\"Ernest.Wagner\">\n  <Attributes>\n    <Map>\n      <entry key=\"disableRetryRequest\">\n        <value>\n          <Boolean>true</Boolean>\n        </value>\n      </entry>\n      <entry key=\"identityRequestId\" value=\"0000000001\"/>\n      <entry key=\"optimisticProvisioning\" value=\"false\"/>\n      <entry key=\"requester\" value=\"James.Smith\"/>\n      <entry key=\"source\" value=\"LCM\"/>\n    </Map>\n  </Attributes>\n  <MasterPlan>\n    <ProvisioningPlan nativeIdentity=\"Ernest.Wagner\" targetIntegration=\"ADDirectDemodata\">\n      <Attributes>\n        <Map>\n          <entry key=\"identityRequestId\" value=\"0000000001\"/>\n          <entry key=\"requester\" value=\"James.Smith\"/>\n          <entry key=\"source\" value=\"LCM\"/>\n        </Map>\n      </Attributes>\n      <Requesters>\n        <Reference class=\"sailpoint.object.Identity\" id=\"2c9084ee5cf81e11015cf81efe370613\" name=\"James.Smith\"/>\n      </Requesters>\n    </ProvisioningPlan>\n  </MasterPlan>\n</ProvisioningProject>\n",
+"key": "project"
+},
+{
+"value": "0000000001",
+"key": "identityRequestId"
+},
+{
+"value": "0",
+"key": "retries"
+},
+{
+"value": "2c9084ee5cf825e8015cf9fca3c10ffd",
+"key": "workflowCaseId"
+},
+{
+"value": "<WorkflowSummary step=\"end\"/>\n",
+"key": "workflowSummary"
+}
+],
+"completed": "2017-06-30T12:11:43.909-05:00"
+}
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/LaunchedWorkflows/[ID]`
+
+# Task Results (/TaskResults)
+
+The task results resource within IdentityIQ allows you to get/list one or all task results.
+
+Parameter | Description
+--------- | -----------
+id | ID of the task result object
+name | Name of the task result
+targetName | Name of the target
+completed | Date task completed
+expiration | Date the task expired
+verified | Date the task was verified
+
+
+## Get all Task Results
+
+This request retrieves all task results within IdentityIQ
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/TaskResults”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:api:messages:2.0:ListResponse"
+],
+"startIndex": 1,
+"totalResults": 1,
+"Resources": [
+{
+"progress": "Demodata Effective Access Indexing: Running",
+"launched": "2017-06-30T03:32:21.167-05:00",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:TaskResult"
+],
+"taskDefinition": "setupAllTask",
+"host": "blackbeard",
+"type": "Generic",
+"pendingSignoffs": 0,
+"meta": {
+"lastModified": "2017-06-30T03:37:11.934-05:00",
+"created": "2017-06-30T03:32:21.173-05:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/TaskResults/2c9084ee5cf82100015cf82126b50002",
+"version": "W/\"1498811831934\"",
+"resourceType": "TaskResult"
+},
+"messages": [],
+"id": "2c9084ee5cf82100015cf82126b50002",
+"completionStatus": "Success",
+"launcher": "spadmin",
+"partitioned": false,
+"terminated": false,
+"name": "setupAllTask",
+"attributes": [
+{
+"value": "Aggregate HR Authoritative: Starting\nAggregate HR Authoritative: Complete\n\nAggregate Correlated Applications: Starting\nAggregate Correlated Applications: Complete\n\nAggregate Composite Application: Starting\nAggregate Composite Application: Complete\n\nAggregate Acct Groups: Starting\nAggregate Acct Groups: Complete\n\nAdminsAggTask: Starting\nAdminsAggTask: Complete\n\ntestInstancesAccountAggregation: Starting\ntestInstancesAccountAggregation: Complete\n\ntestInstancesAccountGroupAggregation: Starting\ntestInstancesAccountGroupAggregation: Complete\n\nADDirectAccountAggregation: Starting\nADDirectAccountAggregation: Complete\n\nADDirectAccountGroupAggregation: Starting\nADDirectAccountGroupAggregation: Complete\n\nRealLDAPAccountAggregation: Starting\nRealLDAPAccountAggregation: Complete\n\nRealLDAPAccountGroupAggregation: Starting\nRealLDAPAccountGroupAggregation: Complete\n\nJDBCDirectDemoDataAccountAgg: Starting\nJDBCDirectDemoDataAccountAgg: Complete\n\nJDBCDirectDemoDataAccountGroupAgg: Starting\nJDBCDirectDemoDataAccountGroupAgg: Complete\n\nOasis DB Activity Aggregation: Starting\nOasis DB Activity Aggregation: Complete\n\nRefresh Groups: Starting\nRefresh Groups: Complete\n\nRefresh Identity Cube: Starting\nRefresh Identity Cube: Complete\n\nRefresh Groups: Starting\nRefresh Groups: Complete\n\nRefresh Application Scores: Starting\nRefresh Application Scores: Complete\n\nRole Index Refresh: Starting\nRole Index Refresh: Complete\n\nRefresh Role MetaData: Starting\nRefresh Role MetaData: Complete\n\nRefresh Role Scorecard: Starting\nRefresh Role Scorecard: Complete\n\nCheck Active Policies: Starting\nCheck Active Policies: Complete\n\nDemodata Effective Access Indexing: Starting\nDemodata Effective Access Indexing: Complete\n\n",
+"key": "tasksRun"
+}
+],
+"completed": "2017-06-30T03:37:11.930-05:00"
+}]}
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/TaskResults`
+
+## Get Single Task Results
+
+This request retrieves a single task results within IdentityIQ
+
+> **Sample Request**
+
+```cURL
+curl -u "<user>:<password>"
+"http://localhost:8080/iiq/scim/v2/TaskResults/[ID]”
+```
+
+> **Sample Response** (in JSON)
+
+```json
+{
+"schemas": [
+"urn:ietf:params:scim:api:messages:2.0:ListResponse"
+],
+"startIndex": 1,
+"totalResults": 1,
+"Resources": [
+{
+"progress": "Demodata Effective Access Indexing: Running",
+"launched": "2017-06-30T03:32:21.167-05:00",
+"schemas": [
+"urn:ietf:params:scim:schemas:sailpoint:1.0:TaskResult"
+],
+"taskDefinition": "setupAllTask",
+"host": "blackbeard",
+"type": "Generic",
+"pendingSignoffs": 0,
+"meta": {
+"lastModified": "2017-06-30T03:37:11.934-05:00",
+"created": "2017-06-30T03:32:21.173-05:00",
+"location": "http://blackbeard.test.sailpoint.com:8081/identityiq/scim/v2/TaskResults/2c9084ee5cf82100015cf82126b50002",
+"version": "W/\"1498811831934\"",
+"resourceType": "TaskResult"
+},
+"messages": [],
+"id": "2c9084ee5cf82100015cf82126b50002",
+"completionStatus": "Success",
+"launcher": "spadmin",
+"partitioned": false,
+"terminated": false,
+"name": "setupAllTask",
+"attributes": [
+{
+"value": "Aggregate HR Authoritative: Starting\nAggregate HR Authoritative: Complete\n\nAggregate Correlated Applications: Starting\nAggregate Correlated Applications: Complete\n\nAggregate Composite Application: Starting\nAggregate Composite Application: Complete\n\nAggregate Acct Groups: Starting\nAggregate Acct Groups: Complete\n\nAdminsAggTask: Starting\nAdminsAggTask: Complete\n\ntestInstancesAccountAggregation: Starting\ntestInstancesAccountAggregation: Complete\n\ntestInstancesAccountGroupAggregation: Starting\ntestInstancesAccountGroupAggregation: Complete\n\nADDirectAccountAggregation: Starting\nADDirectAccountAggregation: Complete\n\nADDirectAccountGroupAggregation: Starting\nADDirectAccountGroupAggregation: Complete\n\nRealLDAPAccountAggregation: Starting\nRealLDAPAccountAggregation: Complete\n\nRealLDAPAccountGroupAggregation: Starting\nRealLDAPAccountGroupAggregation: Complete\n\nJDBCDirectDemoDataAccountAgg: Starting\nJDBCDirectDemoDataAccountAgg: Complete\n\nJDBCDirectDemoDataAccountGroupAgg: Starting\nJDBCDirectDemoDataAccountGroupAgg: Complete\n\nOasis DB Activity Aggregation: Starting\nOasis DB Activity Aggregation: Complete\n\nRefresh Groups: Starting\nRefresh Groups: Complete\n\nRefresh Identity Cube: Starting\nRefresh Identity Cube: Complete\n\nRefresh Groups: Starting\nRefresh Groups: Complete\n\nRefresh Application Scores: Starting\nRefresh Application Scores: Complete\n\nRole Index Refresh: Starting\nRole Index Refresh: Complete\n\nRefresh Role MetaData: Starting\nRefresh Role MetaData: Complete\n\nRefresh Role Scorecard: Starting\nRefresh Role Scorecard: Complete\n\nCheck Active Policies: Starting\nCheck Active Policies: Complete\n\nDemodata Effective Access Indexing: Starting\nDemodata Effective Access Indexing: Complete\n\n",
+"key": "tasksRun"
+}
+],
+"completed": "2017-06-30T03:37:11.930-05:00"
+}]}
+```
+
+### HTTP Request
+
+`GET http://localhost:8080/iiq/scim/v2/TaskResults/[ID]`

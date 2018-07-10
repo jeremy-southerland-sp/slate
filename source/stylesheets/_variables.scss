@@ -33,16 +33,17 @@ $lang-select-border: #000;
 $lang-select-bg: #222;
 $lang-select-active-bg: $examples-bg; // feel free to change this to blue or something
 $lang-select-pressed-bg: #111; // color of language tab bg when mouse is pressed
-$main-bg: #eaf2f6;
+$main-bg: #FFF;//eaf2f2
 $aside-notice-bg: #8fbcd4;
 $aside-warning-bg: #c97a7e;
 $aside-success-bg: #6ac174;
-$search-notice-bg: #c97a7e;
+$search-notice-bg: #000;
+//$search-notice-bg: #c97a7e;
 
 
 // TEXT COLORS
 ////////////////////
-$main-text: #333; // main content text color
+$main-text: #000; // main content text color
 $nav-text: #fff;
 $nav-active-text: #fff;
 $lang-select-text: #fff; // color of unselected language tab text
@@ -91,7 +92,7 @@ $nav-footer-border-color: #666;
 $nav-embossed-border-top: #000;
 $nav-embossed-border-bottom: #939393;
 $main-embossed-text-shadow: 0px 1px 0px #fff;
-$search-box-border-color: #666;
+$search-box-border-color: #fff;//666
 
 
 ////////////////////////////////////////////////////////////////////////////////
